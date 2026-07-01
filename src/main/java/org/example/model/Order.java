@@ -15,18 +15,29 @@ public class Order {
         this.status = OrderStatus.NEW;
     }
 
+    // return later
     public void addItem(OrderItem item){
-        // TODO: prevent adding items if order is already paid
+        if (isPaid()) {
+            System.out.println("Cannot add items to a paid order");
+            return;
+        }
         items.add(item);
     }
 
+    // return later
     public double calculateTotal(){
-        // TODO: calculate total from all order items (including discounts)
-        return 0;
+            double total = 0;
+            for (OrderItem item:items){
+                total += item.calculateTotal();
+            }
+            return discount.apply(total);
     }
 
+    // return later
     public void markAsPaid(){
-        // TODO: validate order is not empty
+        if (items.isEmpty()){
+            throw new IllegalArgumentException("Cannot pay for an empty order");
+        }
         this.status = OrderStatus.PAID;
     }
 
@@ -53,16 +64,21 @@ public class Order {
     public static class Builder{
         private String customerName;
         private List<OrderItem> items = new ArrayList<>();
+        // setting fields (customer name)
         public Builder customerName(String customerName){
             this.customerName = customerName;
             return this;
         }
+        // Adds passed in ORderItem to list
         public Builder addItem(OrderItem item){
             this.items.add(item);
             return this;
         }
         public Order build(){
-            // TODO: validate customerName
+            if (this.customerName.isEmpty() || this.customerName.isBlank())
+            {
+                throw new IllegalArgumentException("Customer name cannot be empty");
+            }
             return new Order(this);
         }
     }

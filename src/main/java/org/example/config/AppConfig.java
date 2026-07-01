@@ -14,9 +14,12 @@ public class AppConfig {
         this.taxRate = 0.21;
     }
 
-    public static AppConfig getInstance(){
-        // TODO
-        return null;
+    public static AppConfig getInstance() {
+        if (instance == null)
+        {
+            instance = new AppConfig();
+        }
+        return  instance;
     }
 
     public String getApplicationName() {

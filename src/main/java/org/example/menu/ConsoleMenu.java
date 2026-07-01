@@ -7,6 +7,7 @@ import org.example.model.PaymentResult;
 import org.example.payment.PaymentMethod;
 import org.example.payment.PaymentMethodFactory;
 import org.example.payment.PaymentProcessor;
+import org.example.payment.PaypalPayment;
 
 import java.util.Scanner;
 
@@ -48,7 +49,12 @@ public class ConsoleMenu {
     }
 
     private void addItem(){
-        // TODO: check if order exists
+        // check if an order has been specified
+        if (currentOrder == null)
+        {
+            System.out.println("No order specified. Please specify order");
+            return;
+        }
 
         System.out.println("Item name:");
         String itemName = scanner.nextLine();
@@ -64,8 +70,11 @@ public class ConsoleMenu {
     }
 
     private void viewOrder(){
-        // TODO: check if order exists
-
+        if (currentOrder == null)
+        {
+            System.out.println("No order specified. Please specify order");
+            return;
+        }
         System.out.println("Customer: " + currentOrder.getCustomerName());
         System.out.println("Status: " +  currentOrder.getStatus());
         System.out.println("Items:");
@@ -78,8 +87,11 @@ public class ConsoleMenu {
     }
 
     private void payOrder(){
-        // TODO: check if order exists
-
+        if (currentOrder == null)
+        {
+            System.out.println("No order specified. Please specify order");
+            return;
+        }
         System.out.println("""
                 Select payment method:
                 1. Credit Card
@@ -110,13 +122,18 @@ public class ConsoleMenu {
     }
 
     private  PaymentMethod createPaypalPayment(){
-        // TODO
-        return null;
+        System.out.println("email: ");
+        String email = scanner.nextLine();
+        // set this up later in PaymentFactory
+        return PaymentMethodFactory.createPayPalPayment(email);
     }
 
     private PaymentMethod createGiftCardPayment(){
-        // TODO
-        return null;
+        System.out.println("Code: ");
+        String code = scanner.nextLine();
+        System.out.println("Balance: ");
+        double balance = Double.parseDouble(scanner.nextLine());
+        return PaymentMethodFactory.createGiftCardPayment (code, balance);
     }
 
     private void printMenu(){
